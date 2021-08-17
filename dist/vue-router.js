@@ -9,12 +9,18 @@
     (global = global || self, global.MyVueRouter = factory());
 }(this, (function () { 'use strict';
 
+    function install (Vue) {
+        console.log('gsd666');
+    }
+
     class MyVueRouter {
         constructor (options = {}) {
             this.options = options;
             console.log('gsdoptions', options);
         }
     }
+
+    MyVueRouter.install = install;
 
     return MyVueRouter;
 
