@@ -3,6 +3,7 @@ import { supportsPushState } from "./util/push-state";
 import {HashHistory} from "./history/hash";
 import {HTML5History} from "./history/html5";
 import {AbstractHistory} from "./history/abstract";
+import {createMatcher} from "./create-matcher";
 
 export default class MyVueRouter {
     constructor (options = {}) {
@@ -10,6 +11,7 @@ export default class MyVueRouter {
         this.apps = []
         this.options = options
         console.log('gsdoptions', options)
+        this.matcher = createMatcher(options.routes || [], this)
         let mode = options.mode || 'hash'
         this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false
         if (this.fallback) {
@@ -36,11 +38,21 @@ export default class MyVueRouter {
         this.app = app
         const history = this.history
         if (history instanceof HTML5History) {
-            // TODO
+            history.transitionTo(history.getCurrentLocation())
         } else if (history instanceof HashHistory) {
-            //TODO
+            const setupHashListener = () => {
+                history.setupListeners()
+            }
+            history.transitionTo(
+                history.getCurrentLocation(),
+                setupHashListener,
+                setupHashListener
+            )
         }
         // TODO
+    }
+    match (raw,current,redirectedFrom) {
+        return this.matcher.match(raw, current, redirectedFrom)
     }
 }
 
