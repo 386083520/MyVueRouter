@@ -16,4 +16,7 @@ export class History {
     confirmTransition (route, onComplete, onAbort) {
 
     }
+    listen (cb) {
+        this.cb = cb
+    }
 }

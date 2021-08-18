@@ -49,7 +49,11 @@ export default class MyVueRouter {
                 setupHashListener
             )
         }
-        // TODO
+        history.listen(route => {
+            this.apps.forEach((app) => {
+                app._route = route
+            })
+        })
     }
     match (raw,current,redirectedFrom) {
         return this.matcher.match(raw, current, redirectedFrom)
