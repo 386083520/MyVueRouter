@@ -1,3 +1,5 @@
+import View from './components/view'
+import Link from './components/link'
 export let _Vue
 export function install (Vue) {
     if (install.installed && _Vue === Vue) return
@@ -18,5 +20,7 @@ export function install (Vue) {
         destroyed () {
         }
     })
+    Vue.component('RouterView', View)
+    Vue.component('RouterLink', Link)
     // TODO
 }

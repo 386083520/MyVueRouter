@@ -4,6 +4,7 @@ import {HashHistory} from "./history/hash";
 import {HTML5History} from "./history/html5";
 import {AbstractHistory} from "./history/abstract";
 import {createMatcher} from "./create-matcher";
+import {inBrowser} from "./util/dom";
 
 export default class MyVueRouter {
     constructor (options = {}) {
@@ -61,3 +62,7 @@ export default class MyVueRouter {
 }
 
 MyVueRouter.install = install
+
+if (inBrowser && window.Vue) {
+    window.Vue.use(MyVueRouter)
+}
