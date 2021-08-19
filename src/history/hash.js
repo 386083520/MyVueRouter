@@ -10,10 +10,14 @@ export class HashHistory extends History {
     setupListeners () {
         window.addEventListener('hashchange', ()=> {
             console.log('gsd')
+            this.transitionTo(getHash()) // TODO
         })
     }
 }
 
 export function getHash () {
-    return ''
+    let href = window.location.href
+    const index = href.indexOf('#')
+    href = href.slice(index + 1)
+    return href
 }

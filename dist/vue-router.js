@@ -63,6 +63,7 @@
                     this._routerRoot = this;
                     this._router = this.$options.router;
                     this._router.init(this);
+                    console.log('gsdVue', Vue.util.defineReactive);
                     Vue.util.defineReactive(this, '_route', this._router.history.current);
                 }
                 // TODO
@@ -129,6 +130,7 @@
         updateRoute (route) {
             console.log('gsdupdateRoute', route);
             this.current = route;
+            console.log('gsdthis', this);
         }
         listen (cb) {
             this.cb = cb;
@@ -145,12 +147,16 @@
         setupListeners () {
             window.addEventListener('hashchange', ()=> {
                 console.log('gsd');
+                this.transitionTo(getHash()); // TODO
             });
         }
     }
 
     function getHash () {
-        return ''
+        let href = window.location.href;
+        const index = href.indexOf('#');
+        href = href.slice(index + 1);
+        return href
     }
 
     class HTML5History extends History {
@@ -173,44 +179,87 @@
     }
 
     function createMatcher (routes, router) {
-        function match() {
-            return {
-                "meta":{
+        console.log('gsdcreateMatcher', routes, router);
+        function match(raw) {
+            console.log('gsdraw', raw);
+            if(raw === '/foo') {
+                return {
+                    "meta":{
 
-                },
-                "path":"/foo",
-                "hash":"",
-                "query":{
+                    },
+                    "path":"/foo",
+                    "hash":"",
+                    "query":{
 
-                },
-                "params":{
+                    },
+                    "params":{
 
-                },
-                "fullPath":"/foo",
-                "matched":[
-                    {
-                        "path":"/foo",
-                        "regex":{
-                            "keys":[
+                    },
+                    "fullPath":"/foo",
+                    "matched":[
+                        {
+                            "path":"/foo",
+                            "regex":{
+                                "keys":[
 
-                            ]
-                        },
-                        "components":{
-                            "default":{
-                                "template":"<div>foo</div>"
+                                ]
+                            },
+                            "components":{
+                                "default":{
+                                    "template":"<div>foo</div>"
+                                }
+                            },
+                            "instances":{
+
+                            },
+                            "meta":{
+
+                            },
+                            "props":{
+
                             }
-                        },
-                        "instances":{
-
-                        },
-                        "meta":{
-
-                        },
-                        "props":{
-
                         }
-                    }
-                ]
+                    ]
+                }
+            }else if(raw === '/bar') {
+                return {
+                    "meta":{
+
+                    },
+                    "path":"/bar",
+                    "hash":"",
+                    "query":{
+
+                    },
+                    "params":{
+
+                    },
+                    "fullPath":"/bar",
+                    "matched":[
+                        {
+                            "path":"/bar",
+                            "regex":{
+                                "keys":[
+
+                                ]
+                            },
+                            "components":{
+                                "default":{
+                                    "template":"<div>bar</div>"
+                                }
+                            },
+                            "instances":{
+
+                            },
+                            "meta":{
+
+                            },
+                            "props":{
+
+                            }
+                        }
+                    ]
+                }
             }
         }
         function addRoutes() {
@@ -227,7 +276,7 @@
             this.apps = [];
             this.options = options;
             console.log('gsdoptions', options);
-            this.matcher = createMatcher(options.routes || []);
+            this.matcher = createMatcher(options.routes || [], this);
             let mode = options.mode || 'hash';
             this.fallback = mode === 'history' && !supportsPushState && options.fallback !== false;
             if (this.fallback) {
