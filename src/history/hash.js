@@ -8,7 +8,9 @@ export class HashHistory extends History {
         return getHash()
     }
     setupListeners () {
-
+        window.addEventListener('hashchange', ()=> {
+            console.log('gsd')
+        })
     }
 }
 

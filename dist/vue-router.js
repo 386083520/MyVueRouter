@@ -11,8 +11,20 @@
 
     var View = {
         name: 'RouterView',
-        render (h) {
-            return h('div', {}, ['RouterView'])
+        functional: true,
+        props: {
+            name: {
+                type: String,
+                default: 'default'
+            }
+        },
+        render (h, {props, parent, data, children}) {
+            const name = props.name;
+            let depth = 0;
+            const route = parent.$route;
+            const matched = route.matched[depth];
+            const component = matched && matched.components[name];
+            return h(component, data, children)
         }
     };
 
@@ -51,11 +63,15 @@
                     this._routerRoot = this;
                     this._router = this.$options.router;
                     this._router.init(this);
+                    Vue.util.defineReactive(this, '_route', this._router.history.current);
                 }
                 // TODO
             },
             destroyed () {
             }
+        });
+        Object.defineProperty(Vue.prototype, '$route', {
+            get () { return this._routerRoot._route }
         });
         Vue.component('RouterView', View);
         Vue.component('RouterLink', Link);
@@ -101,13 +117,18 @@
             const route = this.router.match(location, this.current);
             console.log('gsdroute', route);
             this.confirmTransition(route,() => {
-
+                this.updateRoute(route);
+                onComplete && onComplete(route);
             }, err => {
 
             });
         }
         confirmTransition (route, onComplete, onAbort) {
-
+            onComplete();
+        }
+        updateRoute (route) {
+            console.log('gsdupdateRoute', route);
+            this.current = route;
         }
         listen (cb) {
             this.cb = cb;
@@ -122,7 +143,9 @@
             return getHash()
         }
         setupListeners () {
-
+            window.addEventListener('hashchange', ()=> {
+                console.log('gsd');
+            });
         }
     }
 

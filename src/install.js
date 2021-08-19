@@ -12,6 +12,7 @@ export function install (Vue) {
                 this._routerRoot = this
                 this._router = this.$options.router
                 this._router.init(this)
+                Vue.util.defineReactive(this, '_route', this._router.history.current)
             } else {
                 // TODO
             }
@@ -19,6 +20,9 @@ export function install (Vue) {
         },
         destroyed () {
         }
+    })
+    Object.defineProperty(Vue.prototype, '$route', {
+        get () { return this._routerRoot._route }
     })
     Vue.component('RouterView', View)
     Vue.component('RouterLink', Link)
