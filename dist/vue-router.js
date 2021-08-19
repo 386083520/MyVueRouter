@@ -99,6 +99,7 @@
         }
         transitionTo (location, onComplete, onAbort) {
             const route = this.router.match(location, this.current);
+            console.log('gsdroute', route);
             this.confirmTransition(route,() => {
 
             }, err => {
@@ -150,7 +151,44 @@
 
     function createMatcher (routes, router) {
         function match() {
+            return {
+                "meta":{
 
+                },
+                "path":"/foo",
+                "hash":"",
+                "query":{
+
+                },
+                "params":{
+
+                },
+                "fullPath":"/foo",
+                "matched":[
+                    {
+                        "path":"/foo",
+                        "regex":{
+                            "keys":[
+
+                            ]
+                        },
+                        "components":{
+                            "default":{
+                                "template":"<div>foo</div>"
+                            }
+                        },
+                        "instances":{
+
+                        },
+                        "meta":{
+
+                        },
+                        "props":{
+
+                        }
+                    }
+                ]
+            }
         }
         function addRoutes() {
         }
