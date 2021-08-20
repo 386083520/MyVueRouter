@@ -21,6 +21,7 @@ export class History {
     updateRoute (route) {
         console.log('gsdupdateRoute', route)
         this.current = route
+        this.cb && this.cb(route)
     }
     listen (cb) {
         this.cb = cb

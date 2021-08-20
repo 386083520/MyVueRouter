@@ -63,7 +63,6 @@
                     this._routerRoot = this;
                     this._router = this.$options.router;
                     this._router.init(this);
-                    console.log('gsdVue', Vue.util.defineReactive);
                     Vue.util.defineReactive(this, '_route', this._router.history.current);
                 }
                 // TODO
@@ -130,7 +129,7 @@
         updateRoute (route) {
             console.log('gsdupdateRoute', route);
             this.current = route;
-            console.log('gsdthis', this);
+            this.cb && this.cb(route);
         }
         listen (cb) {
             this.cb = cb;
