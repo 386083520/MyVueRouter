@@ -97,9 +97,19 @@
             return window.history && 'pushState' in window.history
         })();
 
+    function formatMatch (record) {
+        const res = [];
+        while (record) {
+            res.unshift(record);
+            record = record.parent;
+        }
+        return res
+    }
+
     function createRoute (record,location,redirectedFrom,router) {
         const route = {
-            path: location.path || '/'
+            path: location.path || '/',
+            matched: record ? formatMatch(record) : []
         };
         return Object.freeze(route)
     }
@@ -205,18 +215,33 @@
         }
     }
 
+    function normalizeLocation (raw,current,append,router) {
+        let next = typeof raw === 'string' ? { path: raw } : raw;
+        return next
+    }
+
     function createMatcher (routes, router) {
         console.log('gsdcreateMatcher', routes, router);
         // pathList ["/foo", "/bar"]
         // pathMap ["/bar": {path: "/bar", components: {default: {template: "<div>bar</div>"}}}]
         const { pathList, pathMap, nameMap } = createRouteMap(routes);
         console.log('gsdcreateRouteMap', pathList, pathMap, nameMap);
-
         function match(raw, currentRoute, redirectedFrom) {
             console.log('gsdraw', raw);
-
+            // {hash: "", params: {},path: "/bar",query: {}, _normalized: true}
+            const location = normalizeLocation(raw);
+            const { name } = location;
+            if (name) ; else if (location.path) {
+                const record = pathMap[location.path];
+                { // TODO
+                    return _createRoute(record, location)
+                }
+            }
         }
         function addRoutes() {
+        }
+        function _createRoute (record,location,redirectedFrom) {
+            return createRoute(record, location)
         }
         return {
             match,

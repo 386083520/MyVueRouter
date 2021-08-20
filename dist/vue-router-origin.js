@@ -1490,6 +1490,7 @@
       redirectedFrom
     ) {
       var location = normalizeLocation(raw, currentRoute, false, router);
+      console.log('gsdlocation', location)
       var name = location.name;
 
       if (name) {
