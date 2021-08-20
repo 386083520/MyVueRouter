@@ -177,89 +177,44 @@
         }
     }
 
+    function createRouteMap (routes) {
+        const pathList = [];
+        // $flow-disable-line
+        const pathMap= Object.create(null);
+        // $flow-disable-line
+        const nameMap= Object.create(null);
+        routes.forEach(route => {
+            addRouteRecord(pathList, pathMap, nameMap, route);
+        });
+        return {
+            pathList,
+            pathMap,
+            nameMap
+        }
+    }
+
+    function addRouteRecord (pathList,pathMap,nameMap,route) {
+        const { path, name } = route;
+        const record = {
+            path: path,
+            components: route.components || { default: route.component },
+        };
+        if (!pathMap[record.path]) {
+            pathList.push(record.path);
+            pathMap[record.path] = record;
+        }
+    }
+
     function createMatcher (routes, router) {
         console.log('gsdcreateMatcher', routes, router);
-        function match(raw) {
+        // pathList ["/foo", "/bar"]
+        // pathMap ["/bar": {path: "/bar", components: {default: {template: "<div>bar</div>"}}}]
+        const { pathList, pathMap, nameMap } = createRouteMap(routes);
+        console.log('gsdcreateRouteMap', pathList, pathMap, nameMap);
+
+        function match(raw, currentRoute, redirectedFrom) {
             console.log('gsdraw', raw);
-            if(raw === '/foo') {
-                return {
-                    "meta":{
 
-                    },
-                    "path":"/foo",
-                    "hash":"",
-                    "query":{
-
-                    },
-                    "params":{
-
-                    },
-                    "fullPath":"/foo",
-                    "matched":[
-                        {
-                            "path":"/foo",
-                            "regex":{
-                                "keys":[
-
-                                ]
-                            },
-                            "components":{
-                                "default":{
-                                    "template":"<div>foo</div>"
-                                }
-                            },
-                            "instances":{
-
-                            },
-                            "meta":{
-
-                            },
-                            "props":{
-
-                            }
-                        }
-                    ]
-                }
-            }else if(raw === '/bar') {
-                return {
-                    "meta":{
-
-                    },
-                    "path":"/bar",
-                    "hash":"",
-                    "query":{
-
-                    },
-                    "params":{
-
-                    },
-                    "fullPath":"/bar",
-                    "matched":[
-                        {
-                            "path":"/bar",
-                            "regex":{
-                                "keys":[
-
-                                ]
-                            },
-                            "components":{
-                                "default":{
-                                    "template":"<div>bar</div>"
-                                }
-                            },
-                            "instances":{
-
-                            },
-                            "meta":{
-
-                            },
-                            "props":{
-
-                            }
-                        }
-                    ]
-                }
-            }
         }
         function addRoutes() {
         }

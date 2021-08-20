@@ -1475,6 +1475,7 @@
     router
   ) {
     var ref = createRouteMap(routes);
+    console.log('gsdref', ref)
     var pathList = ref.pathList;
     var pathMap = ref.pathMap;
     var nameMap = ref.nameMap;

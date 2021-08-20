@@ -1,86 +1,14 @@
+import { createRouteMap } from './create-route-map'
 export function createMatcher (routes, router) {
     console.log('gsdcreateMatcher', routes, router)
-    function match(raw) {
+    // pathList ["/foo", "/bar"]
+    // pathMap ["/bar": {path: "/bar", components: {default: {template: "<div>bar</div>"}}}]
+    const { pathList, pathMap, nameMap } = createRouteMap(routes)
+    console.log('gsdcreateRouteMap', pathList, pathMap, nameMap)
+
+    function match(raw, currentRoute, redirectedFrom) {
         console.log('gsdraw', raw)
-        if(raw === '/foo') {
-            return {
-                "meta":{
 
-                },
-                "path":"/foo",
-                "hash":"",
-                "query":{
-
-                },
-                "params":{
-
-                },
-                "fullPath":"/foo",
-                "matched":[
-                    {
-                        "path":"/foo",
-                        "regex":{
-                            "keys":[
-
-                            ]
-                        },
-                        "components":{
-                            "default":{
-                                "template":"<div>foo</div>"
-                            }
-                        },
-                        "instances":{
-
-                        },
-                        "meta":{
-
-                        },
-                        "props":{
-
-                        }
-                    }
-                ]
-            }
-        }else if(raw === '/bar') {
-            return {
-                "meta":{
-
-                },
-                "path":"/bar",
-                "hash":"",
-                "query":{
-
-                },
-                "params":{
-
-                },
-                "fullPath":"/bar",
-                "matched":[
-                    {
-                        "path":"/bar",
-                        "regex":{
-                            "keys":[
-
-                            ]
-                        },
-                        "components":{
-                            "default":{
-                                "template":"<div>bar</div>"
-                            }
-                        },
-                        "instances":{
-
-                        },
-                        "meta":{
-
-                        },
-                        "props":{
-
-                        }
-                    }
-                ]
-            }
-        }
     }
     function addRoutes() {
     }
