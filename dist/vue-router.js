@@ -19,9 +19,18 @@
             }
         },
         render (h, {props, parent, data, children}) {
+            data.routerView = true;
             const name = props.name;
-            let depth = 0;
             const route = parent.$route;
+            let depth = 0;
+            while (parent && parent._routerRoot !== parent) {
+                const vnodeData = parent.$vnode ? parent.$vnode.data : {};
+                if (vnodeData.routerView) {
+                    depth++;
+                }
+                parent = parent.$parent;
+            }
+            data.routerViewDepth = depth;
             const matched = route.matched[depth];
             const component = matched && matched.components[name];
             return h(component, data, children)
@@ -129,7 +138,37 @@
             this.current = START;
         }
         transitionTo (location, onComplete, onAbort) {
-            const route = this.router.match(location, this.current);
+            // const route = this.router.match(location, this.current)
+            const route = {
+                "path":"/foo/foochild",
+                "fullPath":"/foo/foochild",
+                "matched":[
+                    {
+                        "path":"/foo",
+                        "components":{
+                            "default":{
+                                "template":"<div><div>foo</div><router-view></router-view></div>"
+                            }
+                        }
+                    },
+                    {
+                        "path":"/foo/foochild",
+                        "components":{
+                            "default":{
+                                "template":"<div>fooChild</div>"
+                            }
+                        },
+                        "parent":{
+                            "path":"/foo",
+                            "components":{
+                                "default":{
+                                    "template":"<div><div>foo</div><router-view></router-view></div>"
+                                }
+                            }
+                        }
+                    }
+                ]
+            };
             console.log('gsdroute', route);
             this.confirmTransition(route,() => {
                 this.updateRoute(route);

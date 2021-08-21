@@ -71,6 +71,7 @@
       // has been toggled inactive but kept-alive.
       var depth = 0;
       var inactive = false;
+      debugger
       while (parent && parent._routerRoot !== parent) {
         var vnodeData = parent.$vnode ? parent.$vnode.data : {};
         if (vnodeData.routerView) {
