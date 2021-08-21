@@ -254,6 +254,7 @@
         const record = {
             path: normalizedPath,
             components: route.components || { default: route.component },
+            parent
         };
         if (route.children) {
             route.children.forEach(child => {
