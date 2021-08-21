@@ -6,7 +6,37 @@ export class History {
         this.current = START
     }
     transitionTo (location, onComplete, onAbort) {
-        const route = this.router.match(location, this.current)
+        // const route = this.router.match(location, this.current)
+        const route = {
+            "path":"/foo/foochild",
+            "fullPath":"/foo/foochild",
+            "matched":[
+                {
+                    "path":"/foo",
+                    "components":{
+                        "default":{
+                            "template":"<div><div>foo</div><router-view></router-view></div>"
+                        }
+                    }
+                },
+                {
+                    "path":"/foo/foochild",
+                    "components":{
+                        "default":{
+                            "template":"<div>fooChild</div>"
+                        }
+                    },
+                    "parent":{
+                        "path":"/foo",
+                        "components":{
+                            "default":{
+                                "template":"<div><div>foo</div><router-view></router-view></div>"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
         console.log('gsdroute', route)
         this.confirmTransition(route,() => {
             this.updateRoute(route)
