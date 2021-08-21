@@ -23,6 +23,7 @@
             const name = props.name;
             const route = parent.$route;
             let depth = 0;
+            // <div><aa><rv><rv><rv></rv></rv></rv></aa></div>
             while (parent && parent._routerRoot !== parent) {
                 const vnodeData = parent.$vnode ? parent.$vnode.data : {};
                 if (vnodeData.routerView) {
@@ -138,8 +139,8 @@
             this.current = START;
         }
         transitionTo (location, onComplete, onAbort) {
-            // const route = this.router.match(location, this.current)
-            const route = {
+            const route = this.router.match(location, this.current);
+            /*const route = {
                 "path":"/foo/foochild",
                 "fullPath":"/foo/foochild",
                 "matched":[
@@ -168,7 +169,7 @@
                         }
                     }
                 ]
-            };
+            }*/
             console.log('gsdroute', route);
             this.confirmTransition(route,() => {
                 this.updateRoute(route);
@@ -247,16 +248,27 @@
         }
     }
 
-    function addRouteRecord (pathList,pathMap,nameMap,route) {
+    function addRouteRecord (pathList,pathMap,nameMap,route,parent) {
         const { path, name } = route;
+        const normalizedPath = normalizePath(path, parent);
         const record = {
-            path: path,
+            path: normalizedPath,
             components: route.components || { default: route.component },
         };
+        if (route.children) {
+            route.children.forEach(child => {
+                addRouteRecord(pathList, pathMap, nameMap, child, record);
+            });
+        }
         if (!pathMap[record.path]) {
             pathList.push(record.path);
             pathMap[record.path] = record;
         }
+    }
+
+    function normalizePath (path,parent) {
+        if (parent == null) return path
+        return `${parent.path}/${path}`
     }
 
     function normalizeLocation (raw,current,append,router) {

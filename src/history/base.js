@@ -6,8 +6,8 @@ export class History {
         this.current = START
     }
     transitionTo (location, onComplete, onAbort) {
-        // const route = this.router.match(location, this.current)
-        const route = {
+        const route = this.router.match(location, this.current)
+        /*const route = {
             "path":"/foo/foochild",
             "fullPath":"/foo/foochild",
             "matched":[
@@ -36,7 +36,7 @@ export class History {
                     }
                 }
             ]
-        }
+        }*/
         console.log('gsdroute', route)
         this.confirmTransition(route,() => {
             this.updateRoute(route)
